@@ -8,6 +8,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "src"), // ⬅️ 이 줄 추가!
+      "@asset": path.resolve(__dirname, "src/assets"),
     },
   },
 });
