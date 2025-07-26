@@ -3,6 +3,7 @@ import colorIcons from "@/components/common/icons/color-icons";
 import axios from "@/lib/axios";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import EmptyModal from "@/components/modal/empty-modal";
 
 interface QuestionContent {
   questionId: number;
@@ -51,6 +52,7 @@ const categories = [
 
 const FramerCategorySwiper = () => {
   const [index, setIndex] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
   const paginate = (dir: number) => {
     setIndex((prev) => {
@@ -81,6 +83,12 @@ const FramerCategorySwiper = () => {
       });
       console.log(response);
       const questionContent: QuestionContent = response.data;
+      if (
+        response.data.message === "해당 카테고리에 답변 가능한 질문이 없습니다."
+      ) {
+        setIsModalOpen(true);
+        return;
+      }
       localStorage.setItem("questionContent", JSON.stringify(questionContent));
       navigate("/response");
     } catch (error) {
@@ -146,6 +154,7 @@ const FramerCategorySwiper = () => {
       >
         선택하기
       </button>
+      {isModalOpen && <EmptyModal setIsModalOpen={setIsModalOpen} />}
     </div>
   );
 };
