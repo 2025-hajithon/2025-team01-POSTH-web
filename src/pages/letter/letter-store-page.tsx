@@ -5,10 +5,17 @@ const ResponseSubmitPage = () => {
   const navigate = useNavigate();
 
   return (
+<<<<<<< HEAD
     <div className="w-full min-h-screen bg-gray-50 flex flex-col items-center justify-around font-suit p-5 gap-8">
       <div className="w-full flex flex-col items-center justify-center gap-8">
         {/* 상단 메시지 */}
         <div>
+=======
+    <div className="w-full h-full bg-gray-50 flex flex-col items-center justify-between font-suit p-5 gap-8">
+      <div className="w-full flex flex-col items-center justify-center gap-8">
+        {/* 상단 메시지 */}
+        <div className=" pt-32">
+>>>>>>> origin/main
           <div className="w-full text-center text-2xl font-bold text-gray-700 leading-relaxed">
             편지는 아카이브에 <br />
             자동으로 저장되었어요!{" "}
@@ -25,11 +32,19 @@ const ResponseSubmitPage = () => {
       </div>
 
       <div className="w-full flex items-center justify-center gap-3">
+<<<<<<< HEAD
         <button className="w-full py-3 bg-black-400 text-white-100 rounded-lg hover:bg-blue-600 transition-colors">
           아카이브 바로가기
         </button>
         <button
           className="py-3 bg-black-500 text-white-100 rounded-lg hover:bg-blue-600 transition-colors w-1/2"
+=======
+        <button className="w-full py-3 bg-black-400 text-white-100 rounded-lg hover:bg-main-300 transition-colors">
+          아카이브 바로가기
+        </button>
+        <button
+          className="py-3 bg-black-500 text-white-100 rounded-lg hover:bg-main-300 transition-colors w-1/2"
+>>>>>>> origin/main
           onClick={() => navigate("/")}
         >
           확인

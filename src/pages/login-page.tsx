@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Cancel from "@/assets/cancel.svg?url";
+import Cancel from "@/assets/cancel.svg?react";
 import { useNavigate } from "react-router-dom";
 import instance from "@/lib/axios";
 
@@ -45,7 +45,7 @@ const InputField: React.FC<InputFieldProps> = ({
               onClick={handleClear}
               className="bg-transparent p-1 rounded-full hover:cursor-pointer"
             >
-              <img src={Cancel} className="w-10 h-10" />
+              <Cancel className="w-10 h-10" />
             </div>
           )}
         </div>
@@ -79,6 +79,7 @@ const LogIn: React.FC = () => {
       const res = await login({ loginId: username, password: password });
       console.log("로그인 성공", res);
       localStorage.setItem("accessToken", res.accessToken);
+      localStorage.setItem("nickname", res.memberNickname);
       alert("로그인 되었습니다!");
       navigate("/");
     } catch (err) {
