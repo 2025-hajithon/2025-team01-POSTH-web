@@ -1,12 +1,15 @@
+import axios from "@/lib/axios";
+import type { QuestionContent } from "@/types/question";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const ResponsePage = () => {
-  const message =
-    "대학 친구들은 다 취업하고, 자격증도 따고 바쁘게 사는 것 같은데 저는 아직도 평생 직업으로 뭘 가져야 할 지조차 모르겠어요. 뒤처진 기분이 들어서 너무 조급해요.";
-
   const textRef = useRef<HTMLDivElement>(null);
   const [lineCount, setLineCount] = useState(1); // 기본값
+
+  const [questionContent, setQuestionContent] = useState<QuestionContent>(
+    JSON.parse(localStorage.getItem("questionContent") || "{}")
+  );
 
   const navigate = useNavigate();
 
@@ -28,10 +31,34 @@ const ResponsePage = () => {
     return () => resizeObserver.disconnect();
   }, []);
 
+  const reFetchQuestionContent = async () => {
+    const category = localStorage.getItem("category");
+    try {
+      const response = await axios.get("/question", {
+        params: {
+          category: category,
+        },
+      });
+      console.log(response.data);
+      const questionContent: QuestionContent = response.data;
+      localStorage.setItem("questionContent", JSON.stringify(questionContent));
+      setQuestionContent(questionContent);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    reFetchQuestionContent();
+  }, []);
+
   return (
-    <div className="w-full h-screen bg-[#45455A] flex flex-col items-center justify-between font-suit px-6 py-10">
+    <div className="w-full h-full bg-[#45455A] flex flex-col items-center justify-between font-suit px-6 py-10">
       {/* 돌아가기 버튼 */}
-      <div className="w-full flex justify-center">
+      <div
+        className="w-full flex justify-center"
+        onClick={reFetchQuestionContent}
+      >
         <div className="w-10 h-10 rounded-full bg-black bg-white-100 flex items-center justify-center">
           <span className="text-white text-xl">↻</span>
         </div>
@@ -51,7 +78,9 @@ const ResponsePage = () => {
 
         {/* 제목 */}
         <div className="w-full text-center text-sm font-bold mb-5 z-10 relative">
-          <span className="text-blue-300">GDG</span>{" "}
+          <span className="text-blue-300">
+            {questionContent.authorNickname}
+          </span>{" "}
           <span className="text-zinc-700">님의 고민</span>
         </div>
 
@@ -60,7 +89,7 @@ const ResponsePage = () => {
           ref={textRef}
           className="z-10 relative text-zinc-700 text-sm font-medium leading-8 whitespace-pre-wrap"
         >
-          {message}
+          {questionContent.content}
         </div>
       </div>
 

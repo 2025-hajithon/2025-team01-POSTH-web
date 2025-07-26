@@ -1,11 +1,46 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Arrow from "@/assets/icons/chevron-up.svg?react";
 import { useNavigate } from "react-router-dom";
+import axios from "@/lib/axios";
+import type { List } from "@/types/question";
+
+interface Reply {
+  replyId: number;
+  questionContent: string;
+  questionerNickname: string;
+  questionAt: string;
+  replyContent: string;
+  replierNickname: string;
+  replyAt: string;
+  reactionType: string;
+  goodTypes: string;
+  thankMessage: string;
+}
 
 const LetterReadPage = () => {
   const [isOpen, setIsOpen] = useState(true);
+  // localStorage에서 가져온 값을 JSON 파싱하여 초기값으로 사용, 없으면 null로 처리
+  const [replyInfo] = useState<List | null>(() => {
+    const stored = localStorage.getItem("replyInfo");
+    return stored ? JSON.parse(stored) : null;
+  });
+  const [reply, setReply] = useState<Reply | null>(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchReply = async () => {
+      try {
+        const response = await axios.get(`/reply/${replyInfo?.replyId}`);
+        console.log(response.data);
+        setReply(response.data);
+        localStorage.setItem("letterInfo", JSON.stringify(response.data));
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchReply();
+  }, []);
 
   return (
     <div className="w-full h-screen bg-[#54566A] flex flex-col items-center justify-between font-suit px-6 py-10">
@@ -28,19 +63,20 @@ const LetterReadPage = () => {
                 transition={{ duration: 0.3 }}
                 className="overflow-hidden text-sm font-medium leading-snug whitespace-pre-line"
               >
-                회사에서 일이 몰려도, 부탁보다는 내가 하는게 마음 편해서 결국 다
-                제가 하게 되고, 친구 사이에서도 모임 장소나 분위기 다 맞춰주는
-                편이예요.. 누가 부탁 할 때마다 거절을 못하겠어서 도와주면서도
-                속으론 ‘왜 나만 이러지’ 싶은 생각이 계속 들어요 ㅠ 이런 성격
-                바꾸려면 어떻게 해야 하나요 😥 계속 이렇게 지내왔는데 거절하면
-                갑자기 나쁜 사람 될까봐 무서워요
+                {reply?.questionContent}
               </motion.div>
             )}
           </AnimatePresence>
 
           {/* 날짜 */}
           <div className="w-full text-right text-stone-300 text-sm font-semibold leading-3">
-            2025년 7월 11일 오후 9시
+            {reply?.questionAt
+              ? `${new Date(reply.questionAt).getFullYear()}년 ${
+                  new Date(reply.questionAt).getMonth() + 1
+                }월 ${new Date(reply.questionAt).getDate()}일 ${new Date(
+                  reply.questionAt
+                ).getHours()}시 ${new Date(reply.questionAt).getMinutes()}분`
+              : ""}
           </div>
 
           {/* 화살표 버튼 */}
@@ -64,15 +100,19 @@ const LetterReadPage = () => {
             나에게 도착한 편지
           </div>
           <div className="text-gray-main text-sm font-medium leading-snug whitespace-pre-line">
-            헉 제가 딱 그랬었어서 너무 공감돼서 답장 보내요.. 저도 예전엔 누가
-            부탁하면 거절하기 어려워서 그냥 다 해주고 말았는데 지금은 속으로
-            스스로에게 한 번 물어보는 거 같아요 “내가 지금 이 부탁을 들어주려는
-            이유가 뭘까? 미안해서? 불편해서? 진짜 돕고 싶어서?” 이런 느낌으로요!
-            ...
+            {reply?.replyContent}
           </div>
           <div className="text-right text-stone-400 text-sm font-semibold leading-5">
-            <div>2025년 7월 14일 오후 9시</div>
-            <div>from. 홍익</div>
+            <div>
+              {reply?.replyAt
+                ? `${new Date(reply.replyAt).getFullYear()}년 ${
+                    new Date(reply.replyAt).getMonth() + 1
+                  }월 ${new Date(reply.replyAt).getDate()}일 ${new Date(
+                    reply.replyAt
+                  ).getHours()}시 ${new Date(reply.replyAt).getMinutes()}분`
+                : ""}
+            </div>
+            <div>from. {reply?.replierNickname}</div>
           </div>
         </div>
       </div>
