@@ -43,7 +43,7 @@ const LetterReadPage = () => {
   }, []);
 
   return (
-    <div className="w-full h-screen bg-[#54566A] flex flex-col items-center justify-between font-suit px-6 py-10">
+    <div className="w-full h-full bg-[#54566A] flex flex-col items-center justify-between font-suit px-6 py-10">
       {/* 고민 카드 */}
       <div className="w-full flex flex-col items-center justify-center gap-8">
         <div className="w-full px-5 pt-6 pb-3 bg-black-500 rounded-md flex flex-col gap-3 text-white-100">

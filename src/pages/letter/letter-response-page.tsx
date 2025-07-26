@@ -152,6 +152,7 @@ const LetterResponsePage = () => {
       <button
         type="submit"
         className="w-full py-3 bg-black-500 text-white-100 rounded-lg hover:bg-main-400 transition-colors"
+        disabled={!selectedFace}
       >
         저장하기
       </button>

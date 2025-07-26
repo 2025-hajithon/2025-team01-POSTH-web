@@ -56,7 +56,7 @@ const ResponseWritePage = () => {
         className="w-full h-full bg-gray-50 flex flex-col items-center font-suit p-5 justify-between overflow-hidden"
       >
         <div className="w-full flex flex-col items-center">
-          <div className="text-black-500 text-xl font-bold my-10">
+          <div className="text-black-500 text-2xl font-bold my-10">
             나의 경험을 나눠주세요!
           </div>
           <div className="w-full max-w-md flex flex-col gap-4">
