@@ -1,0 +1,138 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import SadFace from "@/assets/face/sad-face.svg?react";
+import ColoredSadFace from "@/assets/face/color-sad-face.svg?react";
+import HappyFace from "@/assets/face/happy-face.svg?react";
+import NeutralFace from "@/assets/face/neutral-face.svg?react";
+import ColoredNeutralFace from "@/assets/face/color-neutral-face.svg?react";
+import ColoredHappyFace from "@/assets/face/color-happy-face.svg?react";
+
+const LetterResponsePage = () => {
+  const navigate = useNavigate();
+  const [selectedFace, setSelectedFace] = useState<string>("");
+  const [selectedKeywordIds, setSelectedKeywordIds] = useState<number[]>([]);
+  const [message, setMessage] = useState<string>("");
+
+  const keywords = [
+    { id: 1, text: "현실적인 조언이 좋았어요" },
+    { id: 2, text: "마음의 위로가 되었어요" },
+    { id: 3, text: "비슷한 상황에 도움이 되었어요" },
+    { id: 4, text: "생각이 정리됐어요" },
+    { id: 5, text: "새로운 용기가 생겼어요" },
+    { id: 6, text: "새로운 시야를 갖게 되었어요" },
+    { id: 7, text: "뜻밖의 통찰을 얻었어요" },
+    { id: 8, text: "가야 할 방향이 생겼어요" },
+    { id: 9, text: "성의가 없었어요" },
+    { id: 10, text: "고민과 맞지 않는 답변이었어요" },
+  ];
+
+  const toggleKeyword = (id: number) => {
+    setSelectedKeywordIds((prev) =>
+      prev.includes(id) ? prev.filter((k) => k !== id) : [...prev, id]
+    );
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // 여기에 저장/전송 로직 추가
+    console.log({
+      selectedFace,
+      selectedKeywordIds,
+      message,
+    });
+    navigate("/letter/store");
+  };
+
+  return (
+    <form
+      onSubmit={handleSubmit}
+      className="w-full h-full bg-gray-50 flex flex-col items-center font-suit p-5 justify-between overflow-hidden"
+    >
+      <div className="w-full flex flex-col items-center justify-center h-full gap-10">
+        <h2 className="text-black-500 text-2xl font-bold text-center leading-snug">
+          하이픈 님이 보낸 <br />
+          편지는 어땠나요?
+        </h2>
+
+        {/* 얼굴 선택 */}
+        <div className="w-full flex items-center justify-center gap-6">
+          {[
+            {
+              type: "sad",
+              label: "별로에요",
+              icon: SadFace,
+              colored: ColoredSadFace,
+            },
+            {
+              type: "neutral",
+              label: "괜찮았어요",
+              icon: NeutralFace,
+              colored: ColoredNeutralFace,
+            },
+            {
+              type: "happy",
+              label: "좋았어요",
+              icon: HappyFace,
+              colored: ColoredHappyFace,
+            },
+          ].map(({ type, label, icon: Icon, colored: ColoredIcon }) => (
+            <button
+              key={type}
+              type="button"
+              onClick={() => setSelectedFace(type)}
+              className="flex flex-col items-center justify-center gap-2 focus:outline-none hover:border-none border-none"
+            >
+              <span>{label}</span>
+              {selectedFace === type ? (
+                <ColoredIcon className="w-14 h-14" />
+              ) : (
+                <Icon className="w-14 h-14" />
+              )}
+            </button>
+          ))}
+        </div>
+
+        {/* 키워드 다중 선택 */}
+        <div className="flex flex-wrap gap-2 w-full justify-center">
+          {keywords.map(({ id, text }) => (
+            <button
+              key={id}
+              type="button"
+              onClick={() => toggleKeyword(id)}
+              className={`px-4 py-2 rounded-xl text-sm transition-colors font-medium ${
+                selectedKeywordIds.includes(id)
+                  ? "bg-main-100 text-black-500"
+                  : "bg-black-500 text-white-100"
+              }`}
+            >
+              {text}
+            </button>
+          ))}
+        </div>
+
+        {/* 메시지 입력 */}
+        <div className="w-full max-w-md text-center">
+          <label className="block mb-2 text-m font-semibold text-black-500 text-left">
+            고마움의 메시지를 전해보세요!
+          </label>
+          <textarea
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            maxLength={150}
+            className="w-full min-h-28 p-3 bg-gray-100 rounded-lg resize-none focus:outline-none"
+            placeholder="(선택) 150자 이내로 작성해주세요"
+          />
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        className="w-full py-3 bg-black-500 text-white-100 rounded-lg hover:bg-main-400 transition-colors"
+      >
+        저장하기
+      </button>
+    </form>
+  );
+};
+
+export default LetterResponsePage;
