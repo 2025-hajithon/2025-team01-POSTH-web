@@ -1,67 +1,75 @@
 import { useState } from "react";
 import icons from "@/components/common/icons/icons";
+import colorIcons from "@/components/common/icons/color-icons";
 import { useNavigate } from "react-router-dom";
 
 const QuestionPage = () => {
-  const [value, setValue] = useState("");
+  const [category, setCategory] = useState("");
   const navigate = useNavigate();
+  const [value, setValue] = useState("");
 
   const QuestionType = [
     {
       id: 1,
       name: "공부",
-      icon: icons.File,
+      icon: icons.Pencil,
+      colorIcon: colorIcons.Pencil,
     },
     {
       id: 2,
       name: "취업",
-      icon: icons.File,
+      icon: icons.Picture,
+      colorIcon: colorIcons.Picture,
     },
     {
       id: 3,
       name: "직장",
-      icon: icons.Bag,
+      icon: icons.Briefcase,
+      colorIcon: colorIcons.Briefcase,
     },
     {
       id: 4,
       name: "진로",
-      icon: icons.Bag,
+      icon: icons.Watch,
+      colorIcon: colorIcons.Watch,
     },
     {
       id: 5,
       name: "연애",
       icon: icons.Heart,
+      colorIcon: colorIcons.Heart,
     },
     {
       id: 6,
       name: "결혼",
-      icon: icons.Heart,
+      icon: icons.Hearts,
+      colorIcon: colorIcons.Hearts,
     },
     {
       id: 7,
       name: "가족",
-      icon: icons.Heart,
+      icon: icons.House,
+      colorIcon: colorIcons.House,
     },
     {
       id: 8,
       name: "인간관계",
-      icon: icons.Human,
+      icon: icons.Users,
+      colorIcon: colorIcons.Users,
     },
     {
       id: 9,
       name: "자기자신",
-      icon: icons.Human,
+      icon: icons.Profile,
+      colorIcon: colorIcons.Profile,
     },
     {
       id: 10,
       name: "기타",
-      icon: icons.Human,
+      icon: icons.More,
+      colorIcon: colorIcons.More,
     },
   ];
-
-  const handleValue = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setValue(e.target.value);
-  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -71,25 +79,29 @@ const QuestionPage = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-full h-full bg-gray-50 flex flex-col items-center font-suit p-5 justify-between overflow-hidden"
+      className="w-full h-full bg-gray-50 flex flex-col items-center font-suit p-5 justify-between overflow-hidden flex-1"
     >
-      <div>
+      <div className="w-full flex flex-col items-center justify-center gap-5">
         {/* 고민 박스 */}
-        <div className="grid grid-cols-5 gap-y-4 gap-x-2 place-items-center bg-white p-4 rounded-lg">
+        <div className="grid grid-cols-5 gap-y-4 gap-x-2 place-items-center bg-white p-4 rounded-lg w-full">
           {QuestionType.map((item) => (
             <div
-              onClick={() => setValue(item.name)}
+              onClick={() => setCategory(item.name)}
               key={item.id}
               className="flex flex-col items-center gap-1 cursor-pointer"
             >
-              <item.icon
-                className={`w-10 h-10 ${
-                  value === item.name ? "text-main-100" : "text-gray-500"
-                }`}
-              />
+              {category === item.name ? (
+                <item.colorIcon className={`w-10 h-10`} />
+              ) : (
+                <item.icon
+                  className={`w-10 h-10 ${
+                    category === item.name ? "text-main-100" : "text-gray-500"
+                  }`}
+                />
+              )}
               <span
                 className={`text-sm ${
-                  value === item.name
+                  category === item.name
                     ? "text-black-500 text-xs font-bold"
                     : "text-gray-500 text-xs font-medium"
                 }`}
@@ -99,7 +111,7 @@ const QuestionPage = () => {
             </div>
           ))}
         </div>
-        <div className="bg-[#FFFEFB] rounded-lg p-[20px]">
+        <div className="bg-[#FFFEFB] rounded-lg p-[20px] w-full">
           {/* 노트 타이틀 */}
           <div className="text-black-500 text-sm font-semibold mb-4">
             지금 나의 고민은 무엇인가요?{" "}
@@ -113,7 +125,7 @@ const QuestionPage = () => {
               maxLength={200}
               className="font-medium w-full resize-none bg-transparent text-sm text-black-500 outline-none leading-9 tracking-wide z-10 relative "
               placeholder=""
-              onChange={handleValue}
+              onChange={(e) => setValue(e.target.value)}
               value={value}
             />
             {/* 밑줄 배경 */}
@@ -129,7 +141,7 @@ const QuestionPage = () => {
       {/* 전송 버튼 */}
       <button
         className=" w-full py-3 bg-main-100 rounded-lg text-sm font-semibold disabled:bg-gray-200 text-black-500 disabled:text-white-100"
-        disabled={value.length === 0}
+        disabled={category.length === 0}
       >
         고민 편지 보내기
       </button>
