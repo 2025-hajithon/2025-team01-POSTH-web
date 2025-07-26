@@ -33,12 +33,12 @@ const LetterComponent = ({
         const Icon = getIcon(item.questionCategory);
         return Icon ? (
           <Icon
-            className="w-8 h-8 absolute top-[68px] left-[65px] rotate-12"
+            className="w-[45px] h-[45px] absolute top-[68px] left-[70px] rotate-12"
             onClick={onClick}
           />
         ) : null;
       })()}
-      <div className="absolute top-[85px] right-[65px] z-10 transform rotate-[4.5deg] text-xs">
+      <div className="absolute top-[85px] right-[65px] z-10 transform rotate-[4.5deg] text-[10px] text-black-300">
         {(() => {
           const date = new Date(item.replyAt);
           const year = date.getFullYear();
