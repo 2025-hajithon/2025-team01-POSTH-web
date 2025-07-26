@@ -8,10 +8,7 @@ const instance = axios.create({
 
 // 요청마다 최신 토큰을 동적으로 설정
 instance.interceptors.request.use((config) => {
-  let token = localStorage.getItem("accessToken");
-  if (!token) {
-    token = localStorage.getItem("tempToken");
-  }
+  const token = localStorage.getItem("accessToken");
   if (token) {
     console.log("Setting Authorization header with token:", token);
     config.headers.Authorization = `Bearer ${token}`;

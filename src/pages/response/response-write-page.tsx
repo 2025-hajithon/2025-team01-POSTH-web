@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ResponseModal from "@/components/modal/response-modal";
+import type { QuestionContent } from "@/types/question";
+import axios from "@/lib/axios";
 
 const ResponseWritePage = () => {
   const [value, setValue] = useState("");
@@ -8,6 +10,9 @@ const ResponseWritePage = () => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(true);
+  const [questionContent] = useState<QuestionContent>(
+    JSON.parse(localStorage.getItem("questionContent") || "{}")
+  );
 
   const lineHeight = 32; // px, tailwind 기준 leading-8
 
@@ -26,9 +31,21 @@ const ResponseWritePage = () => {
     }
   }, [value]);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    navigate("/response/submit");
+
+    try {
+      const response = await axios.post(
+        `/question/${questionContent.questionId}/reply`,
+        {
+          content: value,
+        }
+      );
+      console.log(response);
+      navigate("/response/submit");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -46,13 +63,13 @@ const ResponseWritePage = () => {
             {/* 질문 박스 */}
             <div className="bg-[#2F2F3E] text-white rounded-lg p-5">
               <div className="text-sm font-bold mb-3">
-                <span className="text-blue-300">GDG</span>{" "}
+                <span className="text-blue-300">
+                  {questionContent.authorNickname}
+                </span>{" "}
                 <span className="text-white-100">님의 고민</span>
               </div>
               <p className="text-sm font-medium leading-6 text-white-100">
-                대학 친구들은 다 취업하고, 자격증도 따고 바쁘게 사는 것 같은데
-                저는 아직도 평생 직업으로 뭘 가져야 할 지조차 모르겠어요. 뒤처진
-                기분이 들어서 너무 조급해요.
+                {questionContent.content}
               </p>
             </div>
 

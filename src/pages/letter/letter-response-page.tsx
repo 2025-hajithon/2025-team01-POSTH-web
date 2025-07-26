@@ -6,12 +6,23 @@ import HappyFace from "@/assets/face/happy-face.svg?react";
 import NeutralFace from "@/assets/face/neutral-face.svg?react";
 import ColoredNeutralFace from "@/assets/face/color-neutral-face.svg?react";
 import ColoredHappyFace from "@/assets/face/color-happy-face.svg?react";
+import axios from "@/lib/axios";
+import type { List, Reply } from "@/types/question";
 
 const LetterResponsePage = () => {
   const navigate = useNavigate();
   const [selectedFace, setSelectedFace] = useState<string>("");
   const [selectedKeywordIds, setSelectedKeywordIds] = useState<number[]>([]);
   const [message, setMessage] = useState<string>("");
+
+  const [replyInfo] = useState<List | null>(() => {
+    const stored = localStorage.getItem("replyInfo");
+    return stored ? JSON.parse(stored) : null;
+  });
+  const [letterInfo] = useState<Reply | null>(() => {
+    const stored = localStorage.getItem("letterInfo");
+    return stored ? JSON.parse(stored) : null;
+  });
 
   const keywords = [
     { id: 1, text: "현실적인 조언이 좋았어요" },
@@ -32,7 +43,7 @@ const LetterResponsePage = () => {
     );
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // 여기에 저장/전송 로직 추가
     console.log({
@@ -40,7 +51,20 @@ const LetterResponsePage = () => {
       selectedKeywordIds,
       message,
     });
-    navigate("/letter/store");
+    try {
+      const response = await axios.post(
+        `/reply/${replyInfo?.replyId}/reaction`,
+        {
+          reactionType: selectedFace,
+          goodThings: selectedKeywordIds,
+          thankMessage: message,
+        }
+      );
+      console.log(response);
+      navigate("/letter/store");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -50,7 +74,7 @@ const LetterResponsePage = () => {
     >
       <div className="w-full flex flex-col items-center justify-center h-full gap-10">
         <h2 className="text-black-500 text-2xl font-bold text-center leading-snug">
-          하이픈 님이 보낸 <br />
+          {letterInfo?.replierNickname}님이 보낸 <br />
           편지는 어땠나요?
         </h2>
 
@@ -58,19 +82,19 @@ const LetterResponsePage = () => {
         <div className="w-full flex items-center justify-center gap-6">
           {[
             {
-              type: "sad",
+              type: "BAD",
               label: "별로에요",
               icon: SadFace,
               colored: ColoredSadFace,
             },
             {
-              type: "neutral",
+              type: "SOSO",
               label: "괜찮았어요",
               icon: NeutralFace,
               colored: ColoredNeutralFace,
             },
             {
-              type: "happy",
+              type: "GOOD",
               label: "좋았어요",
               icon: HappyFace,
               colored: ColoredHappyFace,
