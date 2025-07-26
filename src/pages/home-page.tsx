@@ -31,7 +31,7 @@ const HomePage = () => {
 
   const navigate = useNavigate();
   return (
-    <div className="w-full h-full flex flex-col items-center justify-start px-4 py-6 bg-white font-suit">
+    <div className="w-full h-full flex flex-col items-center justify-start px-4 py-6 bg-white font-suit ">
       {/* 헤더 */}
       <div className="w-full max-w-md flex justify-between items-center mb-6">
         <h1 className="text-3xl font-black text-gray-800">POSTH</h1>
