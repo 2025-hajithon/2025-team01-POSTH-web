@@ -25,11 +25,11 @@ const ResponseSubmitPage = () => {
       </div>
 
       <div className="w-full flex items-center justify-center gap-3">
-        <button className="w-full py-3 bg-black-400 text-white-100 rounded-lg hover:bg-blue-600 transition-colors">
+        <button className="w-full py-3 bg-black-400 text-white-100 rounded-lg hover:bg-main-300 transition-colors">
           아카이브 바로가기
         </button>
         <button
-          className="py-3 bg-black-500 text-white-100 rounded-lg hover:bg-blue-600 transition-colors w-1/2"
+          className="py-3 bg-black-500 text-white-100 rounded-lg hover:bg-main-300 transition-colors w-1/2"
           onClick={() => navigate("/")}
         >
           확인

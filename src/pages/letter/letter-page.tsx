@@ -26,16 +26,16 @@ const LetterComponent = ({
   };
   return (
     // overflow-hidden을 추가하여 편지지가 봉투 밖으로 나가는 부분을 숨깁니다.
-    <div
-      className="relative w-[300px] h-[300px] overflow-hidden"
-      onClick={onClick}
-    >
+    <div className="relative w-[300px] h-[300px] overflow-hidden">
       {/* 편지 봉투 (배경) */}
       <Letter className="absolute top-0 left-0 w-full h-full z-0" />
       {(() => {
         const Icon = getIcon(item.questionCategory);
         return Icon ? (
-          <Icon className="w-8 h-8 absolute top-[68px] left-[65px] rotate-12" />
+          <Icon
+            className="w-8 h-8 absolute top-[68px] left-[65px] rotate-12"
+            onClick={onClick}
+          />
         ) : null;
       })()}
       <div className="absolute top-[85px] right-[65px] z-10 transform rotate-[4.5deg] text-xs">
@@ -90,7 +90,7 @@ const LetterPage = () => {
   };
 
   return (
-    <div className="w-full h-full overflow-hidden bg-[#45455A] flex flex-col items-center justify-around font-suit px-6 py-10">
+    <div className="w-full h-full overflow-hidden bg-[#45455A] flex flex-col items-center justify-center font-suit px-6 py-10">
       <div className="text-center">
         <h2 className="text-3xl font-bold text-white-100 mb-2">
           <span className="text-main-200">답장 편지</span>가 {list.length}통
@@ -99,7 +99,7 @@ const LetterPage = () => {
         <p className="text-gray-300">클릭해서 편지를 열어보세요</p>
       </div>
 
-      <div className="relative w-full h-80 flex items-center justify-center overflow-hidden">
+      <div className="relative w-full h-80 flex items-center justify-center overflow-hidden mb-20 mt-12">
         <motion.div
           className="absolute w-full h-full"
           drag="x"

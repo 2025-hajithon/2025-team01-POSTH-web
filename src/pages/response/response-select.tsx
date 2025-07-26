@@ -97,60 +97,64 @@ const FramerCategorySwiper = () => {
   };
 
   return (
-    <div className="w-full h-full overflow-hidden bg-[#45455A] flex flex-col items-center justify-around font-suit px-6 py-10">
-      <div className="text-center">
-        <h2 className="text-3xl font-bold text-white-100 mb-2">
-          카테고리를 선택해보세요!
-        </h2>
-        <p className="text-gray-300">한 카테고리 당 하나의 고민이 들어있어요</p>
-      </div>
+    <div className="w-full h-full overflow-hidden bg-[#45455A] flex flex-col items-center justify-between p-5">
+      <div>
+        <div className="text-center my-20">
+          <h2 className="text-3xl font-bold text-white-100 py-3 ">
+            카테고리를 선택해보세요!
+          </h2>
+          <p className="text-gray-300">
+            한 카테고리 당 하나의 고민이 들어있어요
+          </p>
+        </div>
 
-      <div className="relative w-full h-80 flex items-center justify-center overflow-hidden">
-        <motion.div
-          className="absolute w-full h-full"
-          drag="x"
-          dragConstraints={{ left: 0, right: 0 }}
-          onDragEnd={onDragEnd}
-        >
-          {categories.map((cat, i) => {
-            const Icon = cat.colorIcon;
+        <div className="relative w-full h-80 flex items-center justify-center overflow-hidden">
+          <motion.div
+            className="absolute w-full h-full"
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            onDragEnd={onDragEnd}
+          >
+            {categories.map((cat, i) => {
+              const Icon = cat.colorIcon;
 
-            const offset = i - index;
+              const offset = i - index;
 
-            const x = offset * 120;
-            const scale = offset === 0 ? 1 : 0.7;
-            const opacity = offset === 0 ? 1 : 0.3;
-            const zIndex = 10 - Math.abs(offset);
+              const x = offset * 120;
+              const scale = offset === 0 ? 1 : 0.7;
+              const opacity = offset === 0 ? 1 : 0.3;
+              const zIndex = 10 - Math.abs(offset);
 
-            return (
-              <motion.div
-                key={cat.id}
-                className="absolute w-full h-full flex flex-col items-center justify-center cursor-grab"
-                animate={{ x, scale, opacity, zIndex }}
-                transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                onClick={() => {
-                  if (offset === -1) paginate(-1);
-                  else if (offset === 1) paginate(1);
-                }}
-              >
-                <span className="text-white-100 text-xl mt-2 font-bold">
-                  {cat.name}
-                </span>
-                <div
-                  className={`relative flex flex-col items-center justify-center p-4 rounded-full transition-colors
-                    ${offset === 0 ? "rotate-6" : ""}`}
+              return (
+                <motion.div
+                  key={cat.id}
+                  className="absolute w-full h-full flex flex-col items-center justify-center cursor-grab"
+                  animate={{ x, scale, opacity, zIndex }}
+                  transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  onClick={() => {
+                    if (offset === -1) paginate(-1);
+                    else if (offset === 1) paginate(1);
+                  }}
                 >
-                  <Icon className="w-28 h-28" />
-                </div>
-              </motion.div>
-            );
-          })}
-        </motion.div>
+                  <span className="text-white-100 text-xl mt-2 font-bold">
+                    {cat.name}
+                  </span>
+                  <div
+                    className={`relative flex flex-col items-center justify-center p-4 rounded-full transition-colors
+                    ${offset === 0 ? "rotate-6" : ""}`}
+                  >
+                    <Icon className="w-28 h-28" />
+                  </div>
+                </motion.div>
+              );
+            })}
+          </motion.div>
+        </div>
       </div>
 
       <button
         onClick={handleSelect}
-        className="w-full py-3 bg-black-400 text-white-100 rounded-lg hover:bg-main-500 transition-colors"
+        className="w-full py-3 bg-[#54566A] text-white-100 rounded-lg hover:bg-main-300 hover:text-black-500 transition-colors"
       >
         선택하기
       </button>
