@@ -11,4 +11,7 @@ export default defineConfig({
       "@asset": path.resolve(__dirname, "src/assets"),
     },
   },
+  server: {
+    host: true,
+  },
 });
