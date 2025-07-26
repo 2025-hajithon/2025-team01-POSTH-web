@@ -2,8 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import MainLayout from "@/layouts/main-layout";
 import HomePage from "@/pages/home-page";
 import OnBoarding from "./pages/onboarding";
-import QuestionPage from "@/pages/question/question-page";
-import QuestionSubmitPage from "@/pages/response-submit-page";
+
 import Register from "@/pages/register-page";
 import Nickname from "@/pages/register-nickname-page";
 import LogIn from "@/pages/login-page";
