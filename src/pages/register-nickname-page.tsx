@@ -1,5 +1,17 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import instance from "@/lib/axios";
+
+interface SignupPayload {
+  loginId: string;
+  password: string;
+  nickname: string;
+}
+
+const register = async (data: SignupPayload) => {
+  const res = await instance.post("/member/signup", data);
+  return res.data; // 백엔드가 반환하는 데이터 구조에 따라 수정 가능
+};
 
 const Nickname: React.FC = () => {
   const [nickname, setNickname] = useState("");
@@ -14,14 +26,21 @@ const Nickname: React.FC = () => {
     if (!nickname.trim()) return;
 
     setIsLoading(true);
-
-    // 추후 백엔드와 연결
-    setTimeout(() => {
-      console.log("회원가입 완료:", username, password, nickname);
-      setIsLoading(false);
-      alert("회원가입 되었습니다!");
+    try {
+      const res = register({
+        loginId: username,
+        password: password,
+        nickname: nickname,
+      });
+      console.log("회원 가입 정보: ", res);
+      alert("회원가입 성공!");
       navigate("/");
-    }, 1500);
+    } catch (err) {
+      console.error("회원가입 에러: ", err);
+      alert(`회원가입 실패!: ${err}`);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const isFormValid = nickname.trim().length > 0;

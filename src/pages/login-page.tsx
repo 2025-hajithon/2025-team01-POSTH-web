@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Cancel from "@/assets/cancel.svg?url";
 import { useNavigate } from "react-router-dom";
+import instance from "@/lib/axios";
 
 interface InputFieldProps {
   label: string;
@@ -8,6 +9,11 @@ interface InputFieldProps {
   onChange: (value: string) => void;
   placeholder?: string;
   type?: "text" | "password";
+}
+
+interface LoginPayload {
+  loginId: string;
+  password: string;
 }
 
 // 입력 필드 컴포넌트
@@ -49,6 +55,11 @@ const InputField: React.FC<InputFieldProps> = ({
   );
 };
 
+const login = async (data: LoginPayload) => {
+  const res = await instance.post("/auth/login", data);
+  return res.data;
+};
+
 const LogIn: React.FC = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -64,12 +75,18 @@ const LogIn: React.FC = () => {
 
     setIsLoading(true);
 
-    // 추후 백엔드와 연결
-    setTimeout(() => {
-      setIsLoading(false);
+    try {
+      const res = await login({ loginId: username, password: password });
+      console.log("로그인 성공", res);
+      localStorage.setItem("accessToken", res.accessToken);
       alert("로그인 되었습니다!");
       navigate("/");
-    }, 1500);
+    } catch (err) {
+      console.log("로그인 실패");
+      alert(`로그인 실패! : ${err}`);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
