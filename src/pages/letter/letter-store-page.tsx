@@ -5,10 +5,10 @@ const ResponseSubmitPage = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="w-full h-full bg-gray-50 flex flex-col items-center justify-around font-suit p-5 gap-8">
+    <div className="w-full h-full bg-gray-50 flex flex-col items-center justify-between font-suit p-5 gap-8">
       <div className="w-full flex flex-col items-center justify-center gap-8">
         {/* 상단 메시지 */}
-        <div>
+        <div className=" pt-32">
           <div className="w-full text-center text-2xl font-bold text-gray-700 leading-relaxed">
             편지는 아카이브에 <br />
             자동으로 저장되었어요!{" "}
