@@ -76,8 +76,10 @@ const ResponseWritePage = () => {
             {/* 답변 입력 */}
             <div className="bg-[#FFFEFB] rounded-lg p-5">
               <div className="text-sm font-semibold text-black-500 mb-4">
-                <span className="text-blue-300">홍익</span> 님의 생각을
-                적어주세요!
+                <span className="text-blue-300">
+                  {localStorage.getItem("nickname")}
+                </span>{" "}
+                님의 생각을 적어주세요!
               </div>
 
               <div className="relative">

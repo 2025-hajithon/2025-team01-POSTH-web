@@ -99,7 +99,7 @@ const LetterReadPage = () => {
           <div className="text-stone-400 text-sm font-semibold">
             나에게 도착한 편지
           </div>
-          <div className="text-gray-main text-sm font-medium leading-snug whitespace-pre-line">
+          <div className="text-gray-main text-sm font-medium leading-snug whitespace-pre-line text-black-500">
             {reply?.replyContent}
           </div>
           <div className="text-right text-stone-400 text-sm font-semibold leading-5">

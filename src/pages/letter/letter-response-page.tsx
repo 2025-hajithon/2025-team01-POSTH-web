@@ -70,9 +70,9 @@ const LetterResponsePage = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-full h-full bg-gray-50 flex flex-col items-center font-suit p-5 justify-between overflow-hidden"
+      className="w-full h-full bg-gray-50 flex flex-col justify-between font-suit p-5 overflow-hidden"
     >
-      <div className="w-full flex flex-col items-center justify-center h-full gap-10">
+      <div className="w-full flex flex-col items-center justify-center h-full gap-8 mb-10">
         <h2 className="text-black-500 text-2xl font-bold text-center leading-snug">
           {letterInfo?.replierNickname}님이 보낸 <br />
           편지는 어땠나요?
@@ -106,7 +106,7 @@ const LetterResponsePage = () => {
               onClick={() => setSelectedFace(type)}
               className="flex flex-col items-center justify-center gap-2 focus:outline-none hover:border-none border-none"
             >
-              <span>{label}</span>
+              <span className="text-black-500">{label}</span>
               {selectedFace === type ? (
                 <ColoredIcon className="w-14 h-14" />
               ) : (
@@ -143,7 +143,7 @@ const LetterResponsePage = () => {
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             maxLength={150}
-            className="w-full min-h-28 p-3 bg-gray-100 rounded-lg resize-none focus:outline-none"
+            className="w-full min-h-28 p-3 bg-gray-100 rounded-lg resize-none focus:outline-none text-black-500"
             placeholder="(선택) 150자 이내로 작성해주세요"
           />
         </div>

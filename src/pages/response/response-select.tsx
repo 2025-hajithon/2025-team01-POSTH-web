@@ -98,7 +98,7 @@ const FramerCategorySwiper = () => {
 
   return (
     <div className="w-full h-full overflow-hidden bg-[#45455A] flex flex-col items-center justify-between p-5">
-      <div>
+      <div className="w-full">
         <div className="text-center my-20">
           <h2 className="text-3xl font-bold text-white-100 py-3 ">
             카테고리를 선택해보세요!

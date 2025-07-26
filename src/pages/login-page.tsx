@@ -79,6 +79,7 @@ const LogIn: React.FC = () => {
       const res = await login({ loginId: username, password: password });
       console.log("로그인 성공", res);
       localStorage.setItem("accessToken", res.accessToken);
+      localStorage.setItem("nickname", res.memberNickname);
       alert("로그인 되었습니다!");
       navigate("/");
     } catch (err) {
