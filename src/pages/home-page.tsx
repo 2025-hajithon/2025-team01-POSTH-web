@@ -1,9 +1,5 @@
 const HomePage = () => {
-  return (
-    <>
-      <div className="text-black-300 text-2xl">SUIT Variable</div>
-    </>
-  );
+  return <div>HomePage</div>;
 };
 
 export default HomePage;
