@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Cancel from "@/assets/cancel2.svg?react";
+import Cancel from "@/assets/cancel.svg?react";
 import { useNavigate } from "react-router-dom";
 import instance from "@/lib/axios";
 

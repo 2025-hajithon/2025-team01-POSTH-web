@@ -1,8 +1,11 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ResponseModal from "@/components/modal/response-modal";
+<<<<<<< HEAD
+=======
 import type { QuestionContent } from "@/types/question";
 import axios from "@/lib/axios";
+>>>>>>> origin/main
 
 const ResponseWritePage = () => {
   const [value, setValue] = useState("");
@@ -10,9 +13,12 @@ const ResponseWritePage = () => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(true);
+<<<<<<< HEAD
+=======
   const [questionContent] = useState<QuestionContent>(
     JSON.parse(localStorage.getItem("questionContent") || "{}")
   );
+>>>>>>> origin/main
 
   const lineHeight = 32; // px, tailwind 기준 leading-8
 
@@ -31,6 +37,11 @@ const ResponseWritePage = () => {
     }
   }, [value]);
 
+<<<<<<< HEAD
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    navigate("/response/submit");
+=======
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -46,6 +57,7 @@ const ResponseWritePage = () => {
     } catch (error) {
       console.error(error);
     }
+>>>>>>> origin/main
   };
 
   return (
@@ -56,13 +68,26 @@ const ResponseWritePage = () => {
         className="w-full h-full bg-gray-50 flex flex-col items-center font-suit p-5 justify-between overflow-hidden"
       >
         <div className="w-full flex flex-col items-center">
+<<<<<<< HEAD
+          <div className="text-black-500 text-xl font-bold my-10">
+=======
           <div className="text-black-500 text-2xl font-bold my-10">
+>>>>>>> origin/main
             나의 경험을 나눠주세요!
           </div>
           <div className="w-full max-w-md flex flex-col gap-4">
             {/* 질문 박스 */}
             <div className="bg-[#2F2F3E] text-white rounded-lg p-5">
               <div className="text-sm font-bold mb-3">
+<<<<<<< HEAD
+                <span className="text-blue-300">GDG</span>{" "}
+                <span className="text-white-100">님의 고민</span>
+              </div>
+              <p className="text-sm font-medium leading-6 text-white-100">
+                대학 친구들은 다 취업하고, 자격증도 따고 바쁘게 사는 것 같은데
+                저는 아직도 평생 직업으로 뭘 가져야 할 지조차 모르겠어요. 뒤처진
+                기분이 들어서 너무 조급해요.
+=======
                 <span className="text-blue-300">
                   {questionContent.authorNickname}
                 </span>{" "}
@@ -70,16 +95,22 @@ const ResponseWritePage = () => {
               </div>
               <p className="text-sm font-medium leading-6 text-white-100">
                 {questionContent.content}
+>>>>>>> origin/main
               </p>
             </div>
 
             {/* 답변 입력 */}
             <div className="bg-[#FFFEFB] rounded-lg p-5">
               <div className="text-sm font-semibold text-black-500 mb-4">
+<<<<<<< HEAD
+                <span className="text-blue-300">홍익</span> 님의 생각을
+                적어주세요!
+=======
                 <span className="text-blue-300">
                   {localStorage.getItem("nickname")}
                 </span>{" "}
                 님의 생각을 적어주세요!
+>>>>>>> origin/main
               </div>
 
               <div className="relative">
