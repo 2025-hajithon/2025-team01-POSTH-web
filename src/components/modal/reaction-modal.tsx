@@ -7,7 +7,6 @@ import ColorNeutralFace from "@/assets/face/color-neutral-face.svg?react";
 import ColorHappyFace from "@/assets/face/color-happy-face.svg?react";
 import Close from "@/assets/close.svg?react";
 import instance from "@/lib/axios";
-import { useNavigate } from "react-router-dom";
 
 // 반응 타입 상수
 const REACTION_TYPES = {
@@ -52,11 +51,6 @@ const ReplyDetailReactionModal = ({
   const [thankMessage, setThankMessage] = useState("");
 
   const [isLoading, setIsLoading] = useState(true);
-  const navigate = useNavigate();
-
-  const onClose = () => {
-    navigate(-1); // 뒤로 가기
-  };
   // 데이터 로드
   useEffect(() => {
     const loadReaction = async () => {
@@ -125,7 +119,7 @@ const ReplyDetailReactionModal = ({
         <div className="flex flex-col gap-[18px] items-end justify-start p-4 w-full">
           {/* 닫기 버튼 */}
           <button
-            onClick={onClose}
+            onClick={() => setIsModalOpen(false)}
             className="bg-transparent transition-opacity border-none"
             aria-label="닫기"
           >

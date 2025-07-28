@@ -191,8 +191,9 @@ const ReplyDetailPage: React.FC = () => {
               reply={replyData.replyContent}
               replyAt={replyData.replyAt}
             />
-
-            <ViewReactionButton onClick={() => setIsModalOpen(true)} />
+            {replyData.reactionType && (
+              <ViewReactionButton onClick={() => setIsModalOpen(true)} />
+            )}
 
             <div className="flex justify-center pb-8">
               <DeleteButton onDelete={handleDelete} isDeleting={isDeleting} />
