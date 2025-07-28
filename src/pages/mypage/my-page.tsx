@@ -75,14 +75,14 @@ const Header: React.FC<{ onBack?: () => void }> = ({ onBack }) => (
 
 // 아이콘들
 const ArchiveIcon: React.FC = () => (
-  <div className="w-20 h-20 relative">
-    <Sticker className="w-28 h-28 absolute right-5 bottom-3" />
+  <div className="w-32 h-32 relative">
+    <Sticker className="w-full h-full absolute right-5 bottom-3" />
   </div>
 );
 
 const StatsIcon: React.FC = () => (
-  <div className="w-30 h-30 ">
-    <Poll className="w-28 h-28 absolute right-5 bottom-3 w-" />
+  <div className="relative w-36 h-36">
+    <Poll className="w-full h-full absolute -right-5 -bottom-7 scale-150" />
   </div>
 );
 
@@ -143,7 +143,7 @@ const MyPage: React.FC = () => {
       </div>
 
       {/* 하단 액션 버튼 */}
-      <div className="flex justify-center gap-3 pb-10">
+      <div className="flex justify-center gap-3 pb-10 mt-11">
         <ActionButton
           label="로그아웃"
           onClick={() => {

@@ -22,37 +22,42 @@ import ReplyDetailPage from "./pages/mypage/reply-detail-page";
 import LetterDetailPage from "./pages/mypage/question-detail-page";
 import ReplyDetailReactionPage from "@/pages/mypage/reply-detail-reaction-page";
 
+import ProtectedRoute from "@/components/ProtectedRoute";
+
 export default function App() {
   return (
     <MainLayout>
       <Routes>
         <Route path="/onboarding" element={<OnBoarding />} />
-        <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/register/nickname" element={<RegisterNicknamePage />} />
 
-        <Route path="/letter" element={<LetterPage />} />
-        <Route path="mypage" element={<MyPage />} />
-        <Route path="/mypage/statics" element={<StatsPage />} />
-        <Route path="/mypage/archive" element={<ArchivePage />} />
-        <Route path="/mypage/reply" element={<ReplyDetailPage />} />
-        <Route path="/mypage/question" element={<LetterDetailPage />} />
-        <Route
-          path="/mypage/reply/reaction"
-          element={<ReplyDetailReactionPage />}
-        />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/" element={<HomePage />} />
 
-        <Route path="/question" element={<QuestionPage />} />
-        <Route path="/question/submit" element={<QuestionSubmitPage />} />
+          <Route path="/letter" element={<LetterPage />} />
+          <Route path="mypage" element={<MyPage />} />
+          <Route path="/mypage/statics" element={<StatsPage />} />
+          <Route path="/mypage/archive" element={<ArchivePage />} />
+          <Route path="/mypage/reply" element={<ReplyDetailPage />} />
+          <Route path="/mypage/question" element={<LetterDetailPage />} />
+          <Route
+            path="/mypage/reply/reaction"
+            element={<ReplyDetailReactionPage />}
+          />
 
-        <Route path="/response" element={<ResponsePage />} />
-        <Route path="/response/select" element={<ResponseSelectPage />} />
-        <Route path="/response/write" element={<ResponseWritePage />} />
-        <Route path="/response/submit" element={<ResponseSubmitPage />} />
-        <Route path="/letter/store" element={<LetterStorePage />} />
-        <Route path="/letter/read" element={<LetterReadPage />} />
-        <Route path="/letter/response" element={<LetterResponsePage />} />
+          <Route path="/question" element={<QuestionPage />} />
+          <Route path="/question/submit" element={<QuestionSubmitPage />} />
+
+          <Route path="/response" element={<ResponsePage />} />
+          <Route path="/response/select" element={<ResponseSelectPage />} />
+          <Route path="/response/write" element={<ResponseWritePage />} />
+          <Route path="/response/submit" element={<ResponseSubmitPage />} />
+          <Route path="/letter/store" element={<LetterStorePage />} />
+          <Route path="/letter/read" element={<LetterReadPage />} />
+          <Route path="/letter/response" element={<LetterResponsePage />} />
+        </Route>
       </Routes>
     </MainLayout>
   );
