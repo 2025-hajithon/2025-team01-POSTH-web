@@ -20,7 +20,12 @@ const getCategoryColor = (category: string): string => {
     자기자신: "#fffffb",
     직장: "#8dc5ff",
     연애: "#fdb7ff",
+    결혼: "#ffb7f7",
     진로: "#fffbbc",
+    가족: "#ffb7b7",
+    공부: "#b7ffb7",
+    취업: "#b7d7ff",
+    기타: "#d1d5db",
   };
   return colorMap[category] || "#d1d5db";
 };
