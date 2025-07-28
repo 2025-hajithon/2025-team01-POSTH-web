@@ -9,6 +9,11 @@ import axios from "@/lib/axios";
 const HomePage = () => {
   const [isMessage, setIsMessage] = useState(false);
   useEffect(() => {
+    if (!localStorage.getItem("accessToken")) {
+      navigate("/onboarding");
+      return;
+    }
+
     const fetchList = async () => {
       try {
         const response = await axios.get("/reply/list");
@@ -24,11 +29,6 @@ const HomePage = () => {
     };
 
     fetchList();
-  }, []);
-  useEffect(() => {
-    if (!localStorage.getItem("accessToken")) {
-      navigate("/onboarding");
-    }
   }, []);
 
   const navigate = useNavigate();
