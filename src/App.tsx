@@ -15,7 +15,11 @@ import RegisterNicknamePage from "@/pages/register-nickname-page";
 import ResponseSelectPage from "@/pages/response/response-select";
 import LetterPage from "@/pages/letter/letter-page";
 import OnBoarding from "@/pages/onboarding";
-
+import MyPage from "./pages/mypage/my-page";
+import StatsPage from "./pages/mypage/statics-page";
+import ArchivePage from "./pages/mypage/archive-page";
+import ReplyDetailPage from "./pages/mypage/reply-detail-page";
+import LetterDetailPage from "./pages/mypage/question-detail-page";
 export default function App() {
   return (
     <MainLayout>
@@ -27,6 +31,14 @@ export default function App() {
         <Route path="/register/nickname" element={<RegisterNicknamePage />} />
 
         <Route path="/letter" element={<LetterPage />} />
+        <Route path="mypage" element={<MyPage />} />
+        <Route path="/mypage/statics" element={<StatsPage />} />
+        <Route path="/mypage/archive" element={<ArchivePage />} />
+        <Route path="/mypage/reply/:replyId" element={<ReplyDetailPage />} />
+        <Route
+          path="/mypage/question/:questionId"
+          element={<LetterDetailPage />}
+        />
 
         <Route path="/question" element={<QuestionPage />} />
         <Route path="/question/submit" element={<QuestionSubmitPage />} />
