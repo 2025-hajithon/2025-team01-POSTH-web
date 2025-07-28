@@ -3,13 +3,8 @@ import ChevronLeft from "@/assets/chevron-left.svg?react";
 import ChevronRight from "@/assets/chevron-right.svg?react";
 import { useNavigate } from "react-router-dom";
 import instance from "@/lib/axios";
-
-interface QuestionItem {
-  id: string; // questionId
-  category: string;
-  questionContent: string;
-  questionAt: string;
-}
+import categoryFormat from "@/types/category-format";
+import type { QuestionInfo } from "@/types/question";
 
 interface AnswerItem {
   replyId: string;
@@ -18,11 +13,6 @@ interface AnswerItem {
   replyContent: string;
   replierNickname: string;
   replyAt: string;
-}
-
-interface QuestionListResponse {
-  content: QuestionItem[];
-  last: boolean;
 }
 
 const getCategoryColor = (category: string): string => {
@@ -35,25 +25,30 @@ const getCategoryColor = (category: string): string => {
   return colorMap[category] || "#d1d5db";
 };
 
-const WorryCard: React.FC<{ item: QuestionItem; onClick: () => void }> = ({
+const WorryCard: React.FC<{ item: QuestionInfo; onClick: () => void }> = ({
   item,
   onClick,
 }) => (
   <div
-    className="bg-[#3a3b49] rounded-lg p-4 hover:bg-[#5a5c70] transition-colors cursor-pointer flex flex-col"
+    className="bg-black-400 rounded-lg p-4 hover:bg-[#5a5c70] transition-colors cursor-pointer flex flex-col"
     onClick={onClick}
   >
     <div className="flex items-center justify-between mb-2">
       <span
         className="text-[11px] font-semibold px-2 py-1 rounded-md text-[#3a3b49]"
-        style={{ backgroundColor: getCategoryColor(item.category) }}
+        style={{
+          backgroundColor: getCategoryColor(
+            categoryFormat[item.category as keyof typeof categoryFormat] ??
+              item.category
+          ),
+        }}
       >
-        {item.category || "자유"}
+        {categoryFormat[item.category as keyof typeof categoryFormat] || "자유"}
       </span>
       <ChevronRight className="w-5 h-5 text-gray-400" />
     </div>
     <p className="text-[13px] font-medium text-[rgba(255,255,255,0.8)] leading-[1.7] line-clamp-2">
-      {item.questionContent}
+      {item.content}
     </p>
   </div>
 );
@@ -69,7 +64,7 @@ const AnswerCard: React.FC<{ item: AnswerItem; onClick: () => void }> = ({
     <p className="text-[13px] font-semibold text-[#8dc5ff] leading-[1.6]">
       {item.questionContent}
     </p>
-    <p className="text-[13px] text-white mt-2 leading-[1.7]">
+    <p className="text-[13px] text-white-100 mt-2 leading-[1.7]">
       {item.replyContent}
     </p>
     <span className="text-[11px] text-gray-400 mt-2 block">
@@ -91,7 +86,7 @@ const Header: React.FC<{ onBack?: () => void }> = ({ onBack }) => (
 
 const ArchivePage: React.FC = () => {
   const navigate = useNavigate();
-  const [questions, setQuestions] = useState<QuestionItem[]>([]);
+  const [questions, setQuestions] = useState<QuestionInfo[]>([]);
   const [answers, setAnswers] = useState<AnswerItem[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -100,6 +95,7 @@ const ArchivePage: React.FC = () => {
       setLoading(true);
       const { data } = await instance.get(`/member/my/archive/question/list`);
       console.log(data);
+      setQuestions(data);
     } catch (err) {
       console.error("질문 목록 불러오기 실패:", err);
     } finally {
@@ -107,20 +103,20 @@ const ArchivePage: React.FC = () => {
     }
   };
 
-  //   const fetchAnswers = async () => {
-  //     try {
-  //       const { data } = await instance.get<AnswerItem[]>(
-  //         `/member/my/archive/reply/list`
-  //       );
-  //       setAnswers(data);
-  //     } catch (err) {
-  //       console.error("답변 목록 불러오기 실패:", err);
-  //     }
-  //   };
+  const fetchAnswers = async () => {
+    try {
+      const { data } = await instance.get<AnswerItem[]>(
+        `/member/my/archive/reply/list`
+      );
+      setAnswers(data);
+    } catch (err) {
+      console.error("답변 목록 불러오기 실패:", err);
+    }
+  };
 
   useEffect(() => {
     fetchQuestions();
-    // fetchAnswers();
+    fetchAnswers();
   }, []);
 
   return (
@@ -144,9 +140,11 @@ const ArchivePage: React.FC = () => {
             <div className="space-y-3">
               {questions.map((q) => (
                 <WorryCard
-                  key={q.id}
+                  key={q.questionId}
                   item={q}
-                  onClick={() => navigate(`/question/${q.id}`)}
+                  onClick={() =>
+                    navigate(`/mypage/question?letterId=${q.questionId}`)
+                  }
                 />
               ))}
               {loading && (
@@ -176,7 +174,7 @@ const ArchivePage: React.FC = () => {
                 <AnswerCard
                   key={a.replyId}
                   item={a}
-                  onClick={() => navigate(`/mypage/reply/${a.replyId}`)}
+                  onClick={() => navigate(`/mypage/reply?id=${a.replyId}`)}
                 />
               ))}
             </div>

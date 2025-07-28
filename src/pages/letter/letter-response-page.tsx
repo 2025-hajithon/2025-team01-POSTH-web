@@ -25,16 +25,16 @@ const LetterResponsePage = () => {
   });
 
   const keywords = [
-    { id: 1, text: "현실적인 조언이 좋았어요" },
-    { id: 2, text: "마음의 위로가 되었어요" },
-    { id: 3, text: "비슷한 상황에 도움이 되었어요" },
-    { id: 4, text: "생각이 정리됐어요" },
-    { id: 5, text: "새로운 용기가 생겼어요" },
-    { id: 6, text: "새로운 시야를 갖게 되었어요" },
-    { id: 7, text: "뜻밖의 통찰을 얻었어요" },
-    { id: 8, text: "가야 할 방향이 생겼어요" },
-    { id: 9, text: "성의가 없었어요" },
-    { id: 10, text: "고민과 맞지 않는 답변이었어요" },
+    { id: 0, text: "현실적인 조언이 좋았어요" },
+    { id: 1, text: "마음의 위로가 되었어요" },
+    { id: 2, text: "비슷한 상황에 도움이 되었어요" },
+    { id: 3, text: "생각이 정리됐어요" },
+    { id: 4, text: "새로운 용기가 생겼어요" },
+    { id: 5, text: "새로운 시야를 갖게 되었어요" },
+    { id: 6, text: "뜻밖의 통찰을 얻었어요" },
+    { id: 7, text: "가야 할 방향이 생겼어요" },
+    { id: 8, text: "성의가 없었어요" },
+    { id: 9, text: "고민과 맞지 않는 답변이었어요" },
   ];
 
   const toggleKeyword = (id: number) => {
@@ -152,9 +152,9 @@ const LetterResponsePage = () => {
       <button
         type="submit"
         className="w-full py-3 bg-black-500 text-white-100 rounded-lg hover:bg-main-400 transition-colors"
-        disabled={!selectedFace}
+        disabled={!selectedFace || selectedKeywordIds.length === 0}
       >
-        저장하기
+        전송하기
       </button>
     </form>
   );

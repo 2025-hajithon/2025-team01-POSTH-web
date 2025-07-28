@@ -20,6 +20,8 @@ import StatsPage from "./pages/mypage/statics-page";
 import ArchivePage from "./pages/mypage/archive-page";
 import ReplyDetailPage from "./pages/mypage/reply-detail-page";
 import LetterDetailPage from "./pages/mypage/question-detail-page";
+import ReplyDetailReactionPage from "@/pages/mypage/reply-detail-reaction-page";
+
 export default function App() {
   return (
     <MainLayout>
@@ -34,14 +36,16 @@ export default function App() {
         <Route path="mypage" element={<MyPage />} />
         <Route path="/mypage/statics" element={<StatsPage />} />
         <Route path="/mypage/archive" element={<ArchivePage />} />
-        <Route path="/mypage/reply/:replyId" element={<ReplyDetailPage />} />
+        <Route path="/mypage/reply" element={<ReplyDetailPage />} />
+        <Route path="/mypage/question" element={<LetterDetailPage />} />
         <Route
-          path="/mypage/question/:questionId"
-          element={<LetterDetailPage />}
+          path="/mypage/reply/reaction"
+          element={<ReplyDetailReactionPage />}
         />
 
         <Route path="/question" element={<QuestionPage />} />
         <Route path="/question/submit" element={<QuestionSubmitPage />} />
+
         <Route path="/response" element={<ResponsePage />} />
         <Route path="/response/select" element={<ResponseSelectPage />} />
         <Route path="/response/write" element={<ResponseWritePage />} />

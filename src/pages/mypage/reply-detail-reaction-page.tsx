@@ -7,6 +7,7 @@ import ColorNeutralFace from "@/assets/face/color-neutral-face.svg?react";
 import ColorHappyFace from "@/assets/face/color-happy-face.svg?react";
 import Close from "@/assets/close.svg?react";
 import instance from "@/lib/axios";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 // 반응 타입 상수
 const REACTION_TYPES = {
@@ -31,25 +32,27 @@ const REACTION_TEXT_MAP: Record<string, string> = {
   "9": "고민과 맞지 않는 답변이었어요",
 };
 
-interface Props {
-  replyId: string;
-  onClose?: () => void;
-}
-
 // API 요청 함수
-const fetchReplyReaction = async (replyId: string) => {
+const fetchReplyReaction = async (replyId: string | null) => {
   const { data } = await instance.get(`/member/my/archive/reply/${replyId}`);
   return data;
 };
 
-const ReplyReaction = ({ replyId, onClose }: Props) => {
+const ReplyDetailReactionPage = () => {
   const [selectedReaction, setSelectedReaction] = useState<ReactionType>(
     REACTION_TYPES.HAPPY
   );
   const [feedbackTags, setFeedbackTags] = useState<string[]>([]);
   const [thankMessage, setThankMessage] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
+  const [searchParams] = useSearchParams();
+  const replyId = searchParams.get("id");
 
+  const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
+
+  const onClose = () => {
+    navigate(-1); // 뒤로 가기
+  };
   // 데이터 로드
   useEffect(() => {
     const loadReaction = async () => {
@@ -115,10 +118,10 @@ const ReplyReaction = ({ replyId, onClose }: Props) => {
         {/* 닫기 버튼 */}
         <button
           onClick={onClose}
-          className="w-[14px] h-[14px] hover:opacity-75 transition-opacity"
+          className="bg-transparent transition-opacity border-none"
           aria-label="닫기"
         >
-          <Close className="w-full h-full opacity-50" />
+          <Close className="w-[15px] h-auto" />
         </button>
 
         <div className="flex flex-col gap-8 items-center justify-start w-full">
@@ -199,4 +202,4 @@ const ReplyReaction = ({ replyId, onClose }: Props) => {
   );
 };
 
-export default ReplyReaction;
+export default ReplyDetailReactionPage;

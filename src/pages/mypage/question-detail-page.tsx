@@ -1,28 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import ChevronLeft from "@/assets/chevron-left.svg?react";
 import Bin from "@/assets/bin.svg?react";
-
-// ✅ 타입 정의
-interface QuestionDetail {
-  questionId: number;
-  category: string;
-  content: string;
-  authorNickname: string;
-  createdAt?: string;
-}
-
-interface ReplyDetail {
-  content: string;
-  createdAt: string;
-  senderNickname: string;
-}
-
-interface Letter {
-  id: string;
-  myQuestion: QuestionDetail;
-  reply?: ReplyDetail; // 답변이 없을 수도 있음
-}
+import type { QuestionInfo } from "@/types/question";
+import instance from "@/lib/axios";
+import { DeleteModal } from "@/components/modal/delete-modal";
 
 // ✅ 날짜 포맷팅 함수
 const formatDate = (dateString: string): string => {
@@ -50,9 +32,7 @@ const Header: React.FC<{ onBack?: () => void }> = ({ onBack }) => (
 );
 
 // ✅ 내가 보낸 고민 카드
-const MyQuestionCard: React.FC<{ question: QuestionDetail }> = ({
-  question,
-}) => (
+const MyQuestionCard: React.FC<{ question: QuestionInfo }> = ({ question }) => (
   <div className="bg-[#b1d7ff] rounded-lg px-5 py-6 w-full">
     <div className="flex flex-col gap-1.5 items-center">
       <div className="flex flex-col gap-4 items-start w-full">
@@ -67,7 +47,7 @@ const MyQuestionCard: React.FC<{ question: QuestionDetail }> = ({
       </div>
       <div className="w-full text-right">
         <span className="text-[10px] font-semibold text-[#4a8dd2]">
-          {question.createdAt
+          {question.replyAt
             ? formatDate(question.createdAt)
             : `작성자: ${question.authorNickname}`}
         </span>
@@ -77,21 +57,21 @@ const MyQuestionCard: React.FC<{ question: QuestionDetail }> = ({
 );
 
 // ✅ 받은 답변 카드
-const ReplyCard: React.FC<{ reply: ReplyDetail }> = ({ reply }) => (
+const ReplyCard: React.FC<{ reply: QuestionInfo }> = ({ reply }) => (
   <div className="bg-[#fffffb] rounded-lg px-5 py-6 w-full">
     <h3 className="text-[12px] font-semibold text-[#dcdccf] mb-2">
       나에게 도착한 편지
     </h3>
     <p className="text-[13px] font-medium text-[#3a3b49] whitespace-pre-line">
-      {reply.content}
+      {reply.replyContent}
     </p>
     <div className="w-full text-right mt-3">
       <span className="text-[10px] font-semibold text-[#dcdccf]">
-        {formatDate(reply.createdAt)}
+        {formatDate(reply.replyAt)}
       </span>
       <br />
       <span className="text-[10px] font-semibold text-[#dcdccf]">
-        from. {reply.senderNickname}
+        from. {reply.replierNickname}
       </span>
     </div>
   </div>
@@ -100,7 +80,7 @@ const ReplyCard: React.FC<{ reply: ReplyDetail }> = ({ reply }) => (
 // ✅ 답변이 없을 때 카드
 const NoReplyCard: React.FC = () => (
   <div className="bg-[#fffffb] rounded-lg px-5 py-6 w-full flex justify-center">
-    <p className="text-[14px] font-medium text-[#dcdccf]">
+    <p className="text-[14px] font-medium text-text-black-400">
       아직 답변이 달리지 않았어요!
     </p>
   </div>
@@ -129,36 +109,30 @@ const LoadingSkeleton: React.FC = () => (
 
 const LetterDetailPage: React.FC = () => {
   const navigate = useNavigate();
-  const { letterId } = useParams<{ letterId: string }>();
+  const [searchParams] = useSearchParams();
+  const letterId = searchParams.get("letterId");
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
-  const [letter, setLetter] = useState<Letter | null>(null);
+  const [letter, setLetter] = useState<QuestionInfo | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
 
   // ✅ 더미 데이터 로드
   useEffect(() => {
     setIsLoading(true);
-    setTimeout(() => {
-      const dummyLetter: Letter = {
-        id: letterId || "1",
-        myQuestion: {
-          questionId: 1,
-          category: "자기자신",
-          content:
-            "회사에서 일이 몰려도 부탁보다는 내가 하는게 마음 편해서 결국 다 제가 하게 돼요...",
-          authorNickname: "홍길동",
-          createdAt: "2025-07-11T21:00:00Z",
-        },
-        reply: {
-          content:
-            "저도 예전에 비슷한 상황이 있었어요. 거절은 관계를 망치는 게 아니라 솔직하게 만드는 거예요!",
-          createdAt: "2025-07-14T21:00:00Z",
-          senderNickname: "김지톤",
-        },
-      };
-      setLetter(dummyLetter);
-      setIsLoading(false);
-    }, 800); // 로딩 시뮬레이션
+    const FetchQuestion = async () => {
+      try {
+        const response = await instance.get<QuestionInfo>(
+          `/member/my/archive/question/${letterId}`
+        );
+        setLetter(response.data);
+      } catch (error) {
+        console.error("Error fetching question:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    FetchQuestion();
   }, [letterId]);
 
   const handleBack = () => {
@@ -166,13 +140,17 @@ const LetterDetailPage: React.FC = () => {
   };
 
   const handleDelete = async () => {
-    if (!letter || isDeleting) return;
-    if (!window.confirm("정말로 이 편지를 삭제하시겠습니까?")) return;
-    setIsDeleting(true);
-    setTimeout(() => {
-      alert("더미 데이터: 편지 삭제 완료");
-      navigate(-1);
-    }, 500);
+    if (!letterId || isDeleting) return;
+    try {
+      setIsDeleting(true);
+      await instance.delete(`/member/my/archive/question/${letterId}`);
+      navigate(-1); // 삭제 후 이전 페이지로 이동
+    } catch (error) {
+      console.error("Error deleting letter:", error);
+    } finally {
+      setIsDeleting(false);
+      setDeleteModalOpen(false);
+    }
   };
 
   return (
@@ -184,18 +162,25 @@ const LetterDetailPage: React.FC = () => {
 
         {!isLoading && letter && (
           <div className="flex flex-col gap-8 mb-auto">
-            <MyQuestionCard question={letter.myQuestion} />
-            {letter.reply ? (
-              <ReplyCard reply={letter.reply} />
+            <MyQuestionCard question={letter} />
+            {letter.replyContent ? (
+              <ReplyCard reply={letter} />
             ) : (
               <NoReplyCard />
             )}
             <div className="flex justify-center pb-8">
-              <DeleteButton onDelete={handleDelete} />
+              <DeleteButton onDelete={() => setDeleteModalOpen(true)} />
             </div>
           </div>
         )}
       </div>
+      {deleteModalOpen && (
+        <DeleteModal
+          onConfirm={handleDelete}
+          onCancel={() => setDeleteModalOpen(false)}
+          isDeleting={isDeleting}
+        />
+      )}
     </div>
   );
 };

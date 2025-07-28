@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import ChevronLeft from "@/assets/chevron-left.svg?react";
 import Bin from "@/assets/bin.svg?react";
 import instance from "@/lib/axios";
 import { DeleteModal } from "@/components/modal/delete-modal";
+import ReplyDetailReactionModal from "@/components/modal/reaction-modal";
 
 // ✅ 타입 정의
 interface ReplyDetail {
@@ -128,21 +129,23 @@ const removeReply = async (replyId: string): Promise<void> => {
 // ✅ 메인 컴포넌트
 const ReplyDetailPage: React.FC = () => {
   const navigate = useNavigate();
-  const { id } = useParams<{ id: string }>();
+  const [searchParams] = useSearchParams();
+  const replyId = searchParams.get("id");
 
   const [replyData, setReplyData] = useState<ReplyDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleDelete = async () => {
-    if (!id || isDeleting) return;
+    if (!replyId || isDeleting) return;
     if (!window.confirm("정말로 이 답변을 삭제하시겠습니까?")) return;
 
     try {
       setIsDeleting(true);
-      await removeReply(id);
+      await removeReply(replyId);
       navigate(-1); // 삭제 후 이전 페이지로 이동
     } catch (err) {
       console.error(err);
@@ -154,10 +157,10 @@ const ReplyDetailPage: React.FC = () => {
 
   useEffect(() => {
     const loadReplyDetail = async () => {
-      if (!id) return;
+      if (!replyId) return;
       try {
         setLoading(true);
-        const data = await getReplyDetail(id);
+        const data = await getReplyDetail(replyId);
         setReplyData(data);
       } catch (err) {
         console.error(err);
@@ -167,7 +170,7 @@ const ReplyDetailPage: React.FC = () => {
       }
     };
     loadReplyDetail();
-  }, [id]);
+  }, [replyId]);
 
   return (
     <div className="h-full w-full bg-[#3a3b49] text-white flex flex-col">
@@ -189,9 +192,7 @@ const ReplyDetailPage: React.FC = () => {
               replyAt={replyData.replyAt}
             />
 
-            <ViewReactionButton
-              onClick={() => navigate(`/reply/${id}/reactions`)}
-            />
+            <ViewReactionButton onClick={() => setIsModalOpen(true)} />
 
             <div className="flex justify-center pb-8">
               <DeleteButton onDelete={handleDelete} isDeleting={isDeleting} />
@@ -204,6 +205,12 @@ const ReplyDetailPage: React.FC = () => {
           onConfirm={handleDelete}
           onCancel={() => setShowDeleteModal(false)}
           isDeleting={isDeleting}
+        />
+      )}
+      {isModalOpen && (
+        <ReplyDetailReactionModal
+          setIsModalOpen={setIsModalOpen}
+          replyId={replyId}
         />
       )}
     </div>

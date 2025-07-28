@@ -8,6 +8,19 @@ export interface QuestionContent {
   authorNickname: string;
 }
 
+export interface QuestionInfo {
+  questionId: string;
+  category: string;
+  content: string;
+  createdAt: string;
+  authorNickname: string;
+  replyContent: string;
+  replyAt: string;
+  replierNickname: string;
+  reactionType: string;
+  goodType: number[];
+  thankMessage: string;
+}
 export interface Reply {
   replyId: number;
   questionContent: string;
