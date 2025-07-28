@@ -25,7 +25,7 @@ const HomePage = () => {
   }, []);
   useEffect(() => {
     if (!localStorage.getItem("accessToken")) {
-      navigate("/login");
+      navigate("/register");
     }
   }, []);
 

@@ -34,7 +34,7 @@ const Nickname: React.FC = () => {
       });
       console.log("회원 가입 정보: ", res);
       alert("회원가입 성공!");
-      navigate("/");
+      navigate("/login");
     } catch (err) {
       console.error("회원가입 에러: ", err);
       alert(`회원가입 실패!: ${err}`);
