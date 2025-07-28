@@ -14,11 +14,13 @@ import RegisterPage from "@/pages/register-page";
 import RegisterNicknamePage from "@/pages/register-nickname-page";
 import ResponseSelectPage from "@/pages/response/response-select";
 import LetterPage from "@/pages/letter/letter-page";
+import OnBoarding from "@/pages/onboarding";
 
 export default function App() {
   return (
     <MainLayout>
       <Routes>
+        <Route path="/onboarding" element={<OnBoarding />} />
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />

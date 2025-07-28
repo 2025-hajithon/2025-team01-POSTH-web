@@ -18,6 +18,7 @@ const HomePage = () => {
         // 응답 데이터 처리
       } catch (error) {
         console.error("편지 목록을 가져오는 중 오류 발생:", error);
+        navigate("/login");
       }
     };
 
